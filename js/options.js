@@ -1,6 +1,6 @@
-(function(){
-"use strict";
+(function(){ "use strict";
 
+/*** opening ***/
 $("select").each(function(){
 	$(this)
 		.append('<option value="click">click</option>')
@@ -14,6 +14,8 @@ $("select").each(function(){
 	localStorage.open = JSON.stringify(open);
 });
 
+
+/*** pinned tabs ***/
 $("[name='pinned-save']").change(function(){
 	localStorage.pinned = this.value;
 }).filter("[value='" + localStorage.pinned + "']").prop("checked", true);
@@ -26,6 +28,26 @@ $("#pinned-noreplace").change(function(){
 	}
 }).prop("checked", localStorage.noreplacingpinned === "true");
 
+
+/*** sync ***/
+$("#sync-enabled").change(function(){
+	var self = this, checked = self.checked;
+	
+	chrome.permissions[checked ? "request" : "remove"]({
+		permissions: ["storage"]
+	}, function(changed){
+		self.checked = (checked && !changed) || (!checked && changed);
+	});
+});
+
+chrome.permissions.contains({
+	permissions: ["storage"]
+}, function(has){
+	$("#sync-enabled").prop("checked", has);
+});
+
+
+/*** etc ***/
 chrome.extension.getBackgroundPage()._gaq.push(["_trackPageview", "/options"]);
 
 })();

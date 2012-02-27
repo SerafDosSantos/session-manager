@@ -16,5 +16,6 @@
 	"offline_enabled": true,
 	"omnibox": { "keyword": "session" },
 	"options_page": "options.html",
-	"permissions": ["tabs"]
+	"permissions": ["tabs"],
+	"optional_permissions": ["storage"]
 }
